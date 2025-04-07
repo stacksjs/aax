@@ -5,7 +5,7 @@ import { config } from '../src/config'
 import { convertAAX, splitToChapters } from '../src/converter'
 
 // Path to the test fixture
-const FIXTURE_PATH = join(process.cwd(), 'test/fixtures/DesigningData-IntensiveApplicationsTheBigIdeasBehindReliableScalableandMaintainableSyst_ep7.aax')
+const FIXTURE_PATH = join(process.cwd(), 'test/fixtures/mock.aax')
 const OUTPUT_DIR = join(process.cwd(), 'test/output')
 
 // Mock the FFmpeg execution to avoid actual conversion during tests
@@ -20,13 +20,13 @@ const mockRunFFmpeg = mock(async () => {
 // Mock metadata extraction
 const mockGetMetadata = mock(() => {
   return {
-    title: 'Designing Data-Intensive Applications',
-    author: 'Martin Kleppmann',
-    narrator: 'Some Narrator',
-    duration: 12345,
+    title: 'Test Audiobook',
+    author: 'Test Author',
+    narrator: 'Test Narrator',
+    duration: 3600,
     chapters: [
-      { title: 'Chapter 1', startTime: 0, endTime: 100 },
-      { title: 'Chapter 2', startTime: 101, endTime: 200 },
+      { title: 'Chapter 1', startTime: 0, endTime: 1800 },
+      { title: 'Chapter 2', startTime: 1801, endTime: 3600 },
     ],
   }
 })
@@ -54,7 +54,7 @@ describe('AAX Converter', () => {
 
   afterAll(() => {
     // Clean up any test output files
-    const testOutputPath = join(OUTPUT_DIR, 'Designing_Data_Intensive_Applications.mp3')
+    const testOutputPath = join(OUTPUT_DIR, 'test-output.mp3')
     if (existsSync(testOutputPath)) {
       unlinkSync(testOutputPath)
     }

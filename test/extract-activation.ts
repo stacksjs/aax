@@ -10,10 +10,10 @@ import path from 'node:path'
 import process from 'node:process'
 import { extractAaxChecksum, extractActivationFromFile } from '../src/utils/activation'
 
-// Get AAX file path from command line argument
-const aaxFilePath = process.argv[2]
+// Get AAX file path from command line argument or use mock file
+const aaxFilePath = process.argv[2] || path.join(process.cwd(), 'test/fixtures/mock.aax')
 
-if (!aaxFilePath || !existsSync(aaxFilePath)) {
+if (!existsSync(aaxFilePath)) {
   console.error('Please provide a valid AAX file path')
   process.exit(1)
 }
