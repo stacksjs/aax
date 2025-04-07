@@ -103,6 +103,8 @@ export default {
 }
 ```
 
+## Using the Audible CLI Integration
+
 This tool integrates with the Audible CLI to automatically retrieve activation bytes (activation codes) from Audible's servers using your account credentials. This makes it much easier to convert your AAX audiobooks without manually finding activation codes.
 
 ### Prerequisites
