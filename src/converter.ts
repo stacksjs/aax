@@ -75,6 +75,9 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
     // Input file
     ffmpegArgs.push('-i', options.inputFile)
 
+    // Only process the audio stream (stream 0:0)
+    ffmpegArgs.push('-map', '0:0')
+
     // Audio quality
     ffmpegArgs.push('-ab', `${bitrate}k`)
 
@@ -89,13 +92,18 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
     // Output format specific settings
     if (outputFormat === 'mp3') {
       ffmpegArgs.push('-codec:a', 'libmp3lame')
+      ffmpegArgs.push('-write_xing', '0')
+      ffmpegArgs.push('-id3v2_version', '3')
     }
     else if (outputFormat === 'm4a' || outputFormat === 'm4b') {
       ffmpegArgs.push('-codec:a', 'aac')
       ffmpegArgs.push('-f', 'mp4')
+      ffmpegArgs.push('-movflags', '+faststart')
+      ffmpegArgs.push('-metadata:s:a:0', 'handler=Sound')
     }
 
     // Output file
+    ffmpegArgs.push('-y') // Overwrite output file if it exists
     ffmpegArgs.push(outputPath)
 
     // Log the full command for debugging
