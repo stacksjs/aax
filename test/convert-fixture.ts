@@ -7,7 +7,6 @@ import { existsSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import process from 'node:process'
 import { createInterface } from 'node:readline'
-import { config } from '../src/config'
 import { convertAAX } from '../src/converter'
 import {
   getActivationBytesFromAudibleCli,

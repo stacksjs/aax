@@ -1,6 +1,5 @@
 import { spawn } from 'node:child_process'
 import { existsSync } from 'node:fs'
-import path from 'node:path'
 import { config } from '../config'
 
 /**

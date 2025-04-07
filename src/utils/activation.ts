@@ -1,7 +1,6 @@
 import { execSync } from 'node:child_process'
 import { createHash } from 'node:crypto'
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
-import https from 'node:https'
 import { homedir } from 'node:os'
 import path from 'node:path'
 import process from 'node:process'
