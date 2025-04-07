@@ -1,4 +1,18 @@
 
+## v0.2.0...main
+
+[compare changes](https://github.com/stacksjs/aax/compare/v0.2.0...main)
+
+### 🏡 Chore
+
+- Adjust test technique ([42552b7](https://github.com/stacksjs/aax/commit/42552b7))
+- Add to dictionary ([cf181ec](https://github.com/stacksjs/aax/commit/cf181ec))
+- Add mock.aax ([642e9a9](https://github.com/stacksjs/aax/commit/642e9a9))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](https://github.com/chrisbbreuer))
+
 ## v0.1.1...main
 
 [compare changes](https://github.com/stacksjs/aax/compare/v0.1.1...main)
