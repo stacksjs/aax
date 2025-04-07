@@ -294,21 +294,33 @@ export function getTestFixtureActivationCode(aaxFilePath: string): string | null
  */
 export function getActivationBytesFromAudibleCli(): string | null {
   try {
-    // Check if the audible binary exists in the project root
-    const projectRoot = process.cwd()
-    const audibleBinPath = path.join(projectRoot, 'audible')
-
-    if (!existsSync(audibleBinPath)) {
-      console.warn('Audible CLI binary not found in project root')
-      return null
-    }
-
-    // Make sure it's executable
+    // First check if the audible binary exists in PATH
+    let audibleBinPath = 'audible'
     try {
-      execSync(`chmod +x "${audibleBinPath}"`)
+      // This will throw if audible is not in PATH
+      execSync('which audible', { stdio: 'ignore' })
     }
     catch {
-      // Ignore chmod errors
+      // If not in PATH, check project root
+      const projectRoot = process.cwd()
+      const projectAudiblePath = path.join(projectRoot, 'audible')
+      if (existsSync(projectAudiblePath)) {
+        audibleBinPath = projectAudiblePath
+      }
+      else {
+        console.warn('Audible CLI binary not found in PATH or project root')
+        return null
+      }
+    }
+
+    // Make sure it's executable if it's in project root
+    if (audibleBinPath !== 'audible') {
+      try {
+        execSync(`chmod +x "${audibleBinPath}"`)
+      }
+      catch {
+        // Ignore chmod errors
+      }
     }
 
     // Try to run the activation-bytes command
