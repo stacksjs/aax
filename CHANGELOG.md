@@ -1,4 +1,24 @@
 
+## v0.1.1...main
+
+[compare changes](https://github.com/stacksjs/aax/compare/v0.1.1...main)
+
+### 📖 Documentation
+
+- Add documentations ([dde46d8](https://github.com/stacksjs/aax/commit/dde46d8))
+
+### 🏡 Chore
+
+- Adjust links ([f4ef28c](https://github.com/stacksjs/aax/commit/f4ef28c))
+- Add hint to readme ([82a9df4](https://github.com/stacksjs/aax/commit/82a9df4))
+- Improve audible bin handling ([56e5732](https://github.com/stacksjs/aax/commit/56e5732))
+- Improve ffmpeg config ([c548f37](https://github.com/stacksjs/aax/commit/c548f37))
+- Gitignore audible ([bd409d5](https://github.com/stacksjs/aax/commit/bd409d5))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](https://github.com/chrisbbreuer))
+
 ## v0.1.0...main
 
 [compare changes](https://github.com/stacksjs/aax/compare/v0.1.0...main)
