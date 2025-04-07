@@ -1,49 +1,52 @@
-<p align="center"><img src="https://github.com/stacksjs/rpx/blob/main/.github/art/cover.jpg?raw=true" alt="Social Card of this repo"></p>
+<p align="center"><img src="https://github.com/stacksjs/aax/blob/main/.github/art/cover.jpg?raw=true" alt="Social Card of this repo"></p>
 
-# A Better Developer Experience
+# AAX Audio Converter
 
-> A TypeScript Starter Kit that will help you bootstrap your next project without minimal opinion.
+A TypeScript library and CLI tool for converting Audible AAX audiobooks to standard MP3, M4A, or M4B formats.
 
-# bun-ts-starter
+## Features
 
-This is an opinionated TypeScript Starter kit to help kick-start development of your next Bun package.
+- Convert AAX files to MP3, M4A, or M4B formats
+- Preserve chapter information
+- Automatically detect Audible activation code
+- Split audiobooks by chapters
+- Simple command-line interface
 
 ## Get Started
 
-It's rather simple to get your package development started:
+It's rather simple to get started:
 
 ```bash
-# you may use this GitHub template or the following command:
-bunx degit stacksjs/ts-starter my-pkg
-cd my-pkg
+# Install globally
+npm install -g @stacksjs/aax
 
- # if you don't have pnpm installed, run `npm i -g pnpm`
-bun i # install all deps
-bun run build # builds the library for production-ready use
+# Or use with npx
+npx @stacksjs/aax
 
-# after you have successfully committed, you may create a "release"
-bun run release # automates git commits, versioning, and changelog generations
+# Convert an AAX file
+aax convert your-audiobook.aax
 ```
 
-_Check out the package.json scripts for more commands._
+### Requirements
 
-### Developer Experience (DX)
+- `ffmpeg` & [`audible`](https://github.com/mkb79/audible-cli) must be installed and available in your PATH
 
-This Starter Kit comes pre-configured with the following:
+## Developer Experience (DX)
+
+This package comes pre-configured with the following:
 
 - [Powerful Build Process](https://github.com/oven-sh/bun) - via Bun
 - [Fully Typed APIs](https://www.typescriptlang.org/) - via TypeScript
 - [Documentation-ready](https://vitepress.dev/) - via VitePress
 - [CLI & Binary](https://www.npmjs.com/package/bunx) - via Bun & CAC
-- [Be a Good Commitizen](https://www.npmjs.com/package/git-cz) - pre-configured Commitizen & git-cz setup to simplify semantic git commits, versioning, and changelog generations
-- [Built With Testing In Mind](https://bun.sh/docs/cli/test) - pre-configured unit-testing powered by [Bun](https://bun.sh/docs/cli/test)
-- [Renovate](https://renovatebot.com/) - optimized & automated PR dependency updates
-- [ESLint](https://eslint.org/) - for code linting _(and formatting)_
-- [GitHub Actions](https://github.com/features/actions) - runs your CI _(fixes code style issues, tags releases & creates its changelogs, runs the test suite, etc.)_
+- [Be a Good Commitizen](https://www.npmjs.com/package/git-cz) - pre-configured Commitizen & git-cz setup
+- [Built With Testing In Mind](https://bun.sh/docs/cli/test) - pre-configured unit-testing
+- [ESLint](https://eslint.org/) - for code linting
+- [GitHub Actions](https://github.com/features/actions) - runs your CI
 
 ## Changelog
 
-Please see our [releases](https://github.com/stacksjs/stacks/releases) page for more information on what has changed recently.
+Please see our [releases](https://github.com/stacksjs/aax/releases) page for more information on what has changed recently.
 
 ## Contributing
 
@@ -53,7 +56,7 @@ Please review the [Contributing Guide](https://github.com/stacksjs/contributing)
 
 For help, discussion about best practices, or any other conversation that would benefit from being searchable:
 
-[Discussions on GitHub](https://github.com/stacksjs/stacks/discussions)
+[Discussions on GitHub](https://github.com/stacksjs/aax/discussions)
 
 For casual chit-chat with others using this package:
 
@@ -61,9 +64,13 @@ For casual chit-chat with others using this package:
 
 ## Postcardware
 
-Two things are true: Stacks OSS will always stay open-source, and we do love to receive postcards from wherever Stacks is used! 🌍 _We also publish them on our website. And thank you, Spatie_
+"Software that is free, but hopes for a postcard." We love receiving postcards from around the world showing where Stacks is being used! We showcase them on our website too.
 
-Our address: Stacks.js, 12665 Village Ln #2306, Playa Vista, CA 90094
+Our address: Stacks.js, 12665 Village Ln #2306, Playa Vista, CA 90094, United States 🌎
+
+## Credits
+
+- [@audiamus](https://github.com/audiamus) for the original [AaxAudioConverter](https://github.com/audiamus/AaxAudioConverter)
 
 ## Sponsors
 
@@ -72,14 +79,9 @@ We would like to extend our thanks to the following sponsors for funding Stacks 
 - [JetBrains](https://www.jetbrains.com/)
 - [The Solana Foundation](https://solana.com/)
 
-## Credits
-
-- [Chris Breuer](https://github.com/chrisbbreuer)
-- [All Contributors](https://github.com/stacksjs/rpx/graphs/contributors)
-
 ## License
 
-The MIT License (MIT). Please see [LICENSE](https://github.com/stacksjs/ts-starter/tree/main/LICENSE.md) for more information.
+The MIT License (MIT). Please see [LICENSE](LICENSE.md) for more information.
 
 Made with 💙
 

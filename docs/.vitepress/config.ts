@@ -22,9 +22,8 @@ const nav = [
   { text: 'News', link: 'https://stacksjs.org/news' },
   {
     text: 'Changelog',
-    link: 'https://github.com/stacksjs/ts-starter/blob/main/CHANGELOG.md',
+    link: 'https://github.com/stacksjs/aax/blob/main/CHANGELOG.md',
   },
-  // { text: 'Blog', link: 'https://updates.ow3.org' },
   {
     text: 'Resources',
     items: [
@@ -41,7 +40,7 @@ const nav = [
           },
           {
             text: 'Contributing',
-            link: 'https://github.com/stacksjs/stacks/blob/main/.github/CONTRIBUTING.md',
+            link: 'https://github.com/stacksjs/aax/blob/main/.github/CONTRIBUTING.md',
           },
         ],
       },
@@ -59,15 +58,32 @@ const sidebar = [
       { text: 'Config', link: '/config' },
     ],
   },
-  { text: 'Showcase', link: '/Showcase' },
+  {
+    text: 'Features',
+    items: [
+      { text: 'Multiple Formats', link: '/features/formats' },
+      { text: 'Chapter Support', link: '/features/chapters' },
+      { text: 'Auto Detection', link: '/features/auto-detection' },
+      { text: 'Simple CLI', link: '/features/cli' },
+    ],
+  },
+  {
+    text: 'Advanced',
+    items: [
+      { text: 'Custom FFmpeg', link: '/advanced/custom-ffmpeg' },
+      { text: 'Troubleshooting', link: '/advanced/troubleshooting' },
+    ],
+  },
+  { text: 'API Reference', link: '/api-reference' },
 ]
-const description = 'A TypeScript Starter Kit. For a better Development Experience.'
-const title = 'ts-starter | A TypeScript Starter Kit. For a better Development Experience.'
+
+const description = 'A TypeScript library and CLI tool for converting Audible AAX audiobooks to standard MP3, M4A, or M4B formats.'
+const title = 'AAX Audio Converter | Convert Audible AAX audiobooks to MP3, M4A, or M4B'
 
 export default withPwa(
   defineConfig({
     lang: 'en-US',
-    title: 'ts-starter',
+    title: 'AAX Audio Converter',
     description,
     metaChunk: true,
     cleanUrls: true,
@@ -82,7 +98,7 @@ export default withPwa(
       ['meta', { name: 'author', content: 'Stacks.js, Inc.' }],
       ['meta', {
         name: 'tags',
-        content: 'ts-starter, stacksjs, reverse proxy, modern, lightweight, zero-config, local development',
+        content: 'aax, audible, audiobook, converter, mp3, m4a, m4b, typescript, cli',
       }],
 
       ['meta', { property: 'og:type', content: 'website' }],
@@ -90,10 +106,9 @@ export default withPwa(
       ['meta', { property: 'og:title', content: title }],
       ['meta', { property: 'og:description', content: description }],
 
-      ['meta', { property: 'og:site_name', content: 'ts-starter' }],
+      ['meta', { property: 'og:site_name', content: 'AAX Audio Converter' }],
       ['meta', { property: 'og:image', content: './images/og-image.jpg' }],
-      ['meta', { property: 'og:url', content: 'https://reverse-proxy.sh/' }],
-      // ['script', { 'src': 'https://cdn.usefathom.com/script.js', 'data-site': '', 'data-spa': 'auto', 'defer': '' }],
+      ['meta', { property: 'og:url', content: 'https://aax.sh/' }],
       ...analyticsHead,
     ],
 
@@ -110,7 +125,7 @@ export default withPwa(
       sidebar,
 
       editLink: {
-        pattern: 'https://github.com/stacksjs/stacks/edit/main/docs/docs/:path',
+        pattern: 'https://github.com/stacksjs/aax/edit/main/docs/docs/:path',
         text: 'Edit this page on GitHub',
       },
 
@@ -122,16 +137,9 @@ export default withPwa(
       socialLinks: [
         { icon: 'twitter', link: 'https://twitter.com/stacksjs' },
         { icon: 'bluesky', link: 'https://bsky.app/profile/chrisbreuer.dev' },
-        { icon: 'github', link: 'https://github.com/stacksjs/ts-starter' },
+        { icon: 'github', link: 'https://github.com/stacksjs/aax' },
         { icon: 'discord', link: 'https://discord.gg/stacksjs' },
       ],
-
-      // algolia: services.algolia,
-
-      // carbonAds: {
-      //   code: '',
-      //   placement: '',
-      // },
     },
 
     pwa: {

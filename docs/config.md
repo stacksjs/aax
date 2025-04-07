@@ -1,58 +1,54 @@
 # Configuration
 
-_This is just an example of the ts-starter docs._
-
-The Reverse Proxy can be configured using a `reverse-proxy.config.ts` _(or `reverse-proxy.config.js`)_ file and it will be automatically loaded when running the `reverse-proxy` command.
+You can configure the AAX converter using an `aax.config.ts` _(or `aax.config.js`)_ file in your project root.
 
 ```ts
-// reverse-proxy.config.{ts,js}
-import type { ReverseProxyOptions } from '@stacksjs/rpx'
-import os from 'node:os'
-import path from 'node:path'
+// aax.config.{ts,js}
+import type { AAXConfig } from '@stacksjs/aax'
 
-const config: ReverseProxyOptions = {
+const config: AAXConfig = {
   /**
-   * The from URL to proxy from.
-   * Default: localhost:5173
-   */
-  from: 'localhost:5173',
-
-  /**
-   * The to URL to proxy to.
-   * Default: stacks.localhost
-   */
-  to: 'stacks.localhost',
-
-  /**
-   * The HTTPS settings.
+   * Enable verbose logging
    * Default: true
-   * If set to false, the proxy will use HTTP.
-   * If set to true, the proxy will use HTTPS.
-   * If set to an object, the proxy will use HTTPS with the provided settings.
    */
-  https: {
-    domain: 'stacks.localhost',
-    hostCertCN: 'stacks.localhost',
-    caCertPath: path.join(os.homedir(), '.stacks', 'ssl', `stacks.localhost.ca.crt`),
-    certPath: path.join(os.homedir(), '.stacks', 'ssl', `stacks.localhost.crt`),
-    keyPath: path.join(os.homedir(), '.stacks', 'ssl', `stacks.localhost.crt.key`),
-    altNameIPs: ['127.0.0.1'],
-    altNameURIs: ['localhost'],
-    organizationName: 'stacksjs.org',
-    countryName: 'US',
-    stateName: 'California',
-    localityName: 'Playa Vista',
-    commonName: 'stacks.localhost',
-    validityDays: 180,
-    verbose: false,
-  },
+  verbose: true,
 
   /**
-   * The verbose setting.
-   * Default: false
-   * If set to true, the proxy will log more information.
+   * Output format for converted files
+   * Default: 'mp3'
+   * Options: 'mp3', 'm4a', 'm4b'
    */
-  verbose: false,
+  outputFormat: 'mp3',
+
+  /**
+   * Output directory for converted files
+   * Default: './converted'
+   */
+  outputDir: './my-audiobooks',
+
+  /**
+   * Enable chapter preservation
+   * Default: true
+   */
+  chaptersEnabled: true,
+
+  /**
+   * Audio bitrate in kbps
+   * Default: 128
+   */
+  bitrate: 192,
+
+  /**
+   * Manually set the activation code
+   * Default: auto-detected
+   */
+  // activationCode: '1a2b3c4d',
+
+  /**
+   * Specify a custom FFmpeg path
+   * Default: uses system FFmpeg
+   */
+  // ffmpegPath: '/usr/local/bin/ffmpeg',
 }
 
 export default config
@@ -61,7 +57,7 @@ export default config
 _Then run:_
 
 ```bash
-./rpx start
+aax convert your-audiobook.aax
 ```
 
-To learn more, head over to the [documentation](https://reverse-proxy.sh/).
+To learn more, head over to the [documentation](https://github.com/stacksjs/aax).

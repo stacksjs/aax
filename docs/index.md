@@ -3,9 +3,9 @@
 layout: home
 
 hero:
-  name: "ts-starter"
-  text: "For a better local environment."
-  tagline: "Modern and smart reverse proxy."
+  name: "AAX Audio Converter"
+  text: "Convert Audible AAX audiobooks."
+  tagline: "Modern and simple AAX to MP3/M4A/M4B converter."
   image: /images/logo-white.png
   actions:
     - theme: brand
@@ -13,21 +13,21 @@ hero:
       link: /intro
     - theme: alt
       text: View on GitHub
-      link: https://github.com/stacksjs/rpx
+      link: https://github.com/stacksjs/aax
 
 features:
-  - title: "Minimal Starter Kit"
-    icon: "🔀"
-    details: "Bootstrap your next TypeScript project."
-  - title: "Documentation"
+  - title: "Multiple Formats"
+    icon: "🎵"
+    details: "Convert to MP3, M4A, or M4B formats."
+  - title: "Chapter Support"
     icon: "📚"
-    details: "Easily document your idea/package/library."
-  - title: "CLI"
+    details: "Preserve chapter information for better navigation."
+  - title: "Simple CLI"
     icon: "🛠"
-    details: "Build your own CLI."
-  - title: "Binary"
-    icon: "🚀"
-    details: "Automatically builds a binary for your project out of your CLI."
+    details: "Easy-to-use command line interface."
+  - title: "Auto Detection"
+    icon: "🔍"
+    details: "Automatically detect Audible activation codes."
 ---
 
 <Home />

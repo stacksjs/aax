@@ -1,85 +1,68 @@
-# Get Started
+# Usage
 
-There are two ways of using this reverse proxy: _as a library or as a CLI._
+There are two ways of using this AAX converter: _as a library or as a CLI._
 
 ## Library
 
 Given the npm package is installed:
 
 ```ts
-import type { TlsConfig } from '@stacksjs/rpx'
-import { startProxy } from '@stacksjs/rpx'
+import { convertAAX } from '@stacksjs/aax'
 
-export interface CleanupConfig {
-  hosts: boolean // clean up /etc/hosts, defaults to false
-  certs: boolean // clean up certificates, defaults to false
+async function convertBook() {
+  const result = await convertAAX({
+    inputFile: '/path/to/audiobook.aax',
+    outputFormat: 'mp3',
+    outputDir: './converted',
+    chaptersEnabled: true,
+    bitrate: 128,
+  })
+
+  if (result.success) {
+    console.log(`Conversion complete: ${result.outputPath}`)
+  }
+  else {
+    console.error(`Conversion failed: ${result.error}`)
+  }
 }
-
-export interface ReverseProxyConfig {
-  from: string // domain to proxy from, defaults to localhost:3000
-  to: string // domain to proxy to, defaults to stacks.localhost
-  cleanUrls?: boolean // removes the .html extension from URLs, defaults to false
-  https: boolean | TlsConfig // automatically uses https, defaults to true, also redirects http to https
-  cleanup?: boolean | CleanupConfig // automatically cleans up /etc/hosts, defaults to false
-  verbose: boolean // log verbose output, defaults to false
-}
-
-const config: ReverseProxyOptions = {
-  from: 'localhost:3000',
-  to: 'my-docs.localhost',
-  cleanUrls: true,
-  https: true,
-  cleanup: false,
-}
-
-startProxy(config)
-```
-
-In case you are trying to start multiple proxies, you may use this configuration:
-
-```ts
-// reverse-proxy.config.{ts,js}
-import type { ReverseProxyOptions } from '@stacksjs/rpx'
-import os from 'node:os'
-import path from 'node:path'
-
-const config: ReverseProxyOptions = {
-  https: { // https: true -> also works with sensible defaults
-    caCertPath: path.join(os.homedir(), '.stacks', 'ssl', `stacks.localhost.ca.crt`),
-    certPath: path.join(os.homedir(), '.stacks', 'ssl', `stacks.localhost.crt`),
-    keyPath: path.join(os.homedir(), '.stacks', 'ssl', `stacks.localhost.crt.key`),
-  },
-
-  cleanup: {
-    hosts: true,
-    certs: false,
-  },
-
-  proxies: [
-    {
-      from: 'localhost:5173',
-      to: 'my-app.localhost',
-      cleanUrls: true,
-    },
-    {
-      from: 'localhost:5174',
-      to: 'my-api.local',
-    },
-  ],
-
-  verbose: true,
-}
-
-export default config
 ```
 
 ## CLI
 
+### Basic Usage
+
 ```bash
-rpx --from localhost:3000 --to my-project.localhost
-rpx --from localhost:8080 --to my-project.test --keyPath ./key.pem --certPath ./cert.pem
-rpx --help
-rpx --version
+# Convert an AAX file to MP3
+aax convert your-audiobook.aax
+
+# Convert with custom options
+aax convert your-audiobook.aax --format m4b --output ./my-audiobooks --bitrate 192
+
+# Convert and split by chapters
+aax split your-audiobook.aax
+```
+
+### Available Options
+
+- `-o, --output <dir>` - Output directory (default: ./converted)
+- `-f, --format <format>` - Output format: mp3, m4a, m4b (default: mp3)
+- `-c, --code <code>` - Audible activation code (auto-detected if not provided)
+- `--chapters` - Preserve chapter information (default: true)
+- `-b, --bitrate <kbps>` - Audio bitrate in kbps (default: 128)
+- `-v, --verbose` - Enable verbose logging
+
+### Setting up Audible CLI
+
+```bash
+# Run the setup command
+aax setup-audible
+
+# This will:
+# 1. Check if the audible binary exists
+# 2. Make it executable
+# 3. Run the quickstart wizard
+# 4. Retrieve your activation bytes
+# 5. Save them for future use
 ```
 
 ## Testing
