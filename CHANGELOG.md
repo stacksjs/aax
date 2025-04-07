@@ -1,4 +1,27 @@
 
+## v0.2.1...main
+
+[compare changes](https://github.com/stacksjs/aax/compare/v0.2.1...main)
+
+### 🚀 Enhancements
+
+- Expose several new config options ([cf8f5af](https://github.com/stacksjs/aax/commit/cf8f5af))
+- Add new default `source` bitrate option ([0713af0](https://github.com/stacksjs/aax/commit/0713af0))
+
+### 📖 Documentation
+
+- Adjust dead link ([da11c20](https://github.com/stacksjs/aax/commit/da11c20))
+- Adjust wording ([bbcdd02](https://github.com/stacksjs/aax/commit/bbcdd02))
+
+### 🏡 Chore
+
+- Adjust fathom id ([014ed56](https://github.com/stacksjs/aax/commit/014ed56))
+- Lint ([df2034a](https://github.com/stacksjs/aax/commit/df2034a))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](https://github.com/chrisbbreuer))
+
 ## v0.2.0...main
 
 [compare changes](https://github.com/stacksjs/aax/compare/v0.2.0...main)
