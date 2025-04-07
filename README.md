@@ -30,8 +30,9 @@ npx @stacksjs/aax
 
 ## Requirements
 
-- FFmpeg must be installed and available in your PATH
-- An Audible account with activation code (automatically detected from Audible Manager)
+- `ffmpeg` & [`audible`](https://github.com/mkb79/audible-cli) must be installed and available in your PATH
+
+_Please read [Using the Audible CLI Integration](#using-the-audible-cli-integration) for more information._
 
 ## CLI Usage
 
