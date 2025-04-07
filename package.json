@@ -1,5 +1,5 @@
 {
-  "name": "aax",
+  "name": "@stacksjs/aax",
   "type": "module",
   "version": "0.1.0",
   "description": "A tool to convert AAX files to other formats",

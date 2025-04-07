@@ -22,10 +22,10 @@ A TypeScript library and CLI tool for converting Audible AAX audiobooks to stand
 
 ```bash
 # Install globally
-npm install -g aax
+npm install -g @stacksjs/aax
 
 # Or use with npx
-npx aax
+npx @stacksjs/aax
 ```
 
 ## Requirements
