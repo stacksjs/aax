@@ -81,7 +81,7 @@ We would like to extend our thanks to the following sponsors for funding Stacks 
 
 ## License
 
-The MIT License (MIT). Please see [LICENSE](LICENSE.md) for more information.
+The MIT License (MIT). Please see [LICENSE](/license) for more information.
 
 Made with 💙
 
