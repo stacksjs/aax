@@ -14,6 +14,13 @@ interface ConvertOptions {
   chapters?: boolean
   bitrate?: number
   verbose?: boolean
+  flatFolderStructure?: boolean
+  seriesTitleInFolderStructure?: boolean
+  variableBitRate?: boolean
+  aacEncoding44_1?: boolean
+  useNamedChapters?: boolean
+  skipShortChaptersDuration?: number
+  skipVeryShortChapterDuration?: number
 }
 
 cli
@@ -24,6 +31,13 @@ cli
   .option('--chapters', 'Preserve chapter information (default: true)')
   .option('-b, --bitrate <kbps>', 'Audio bitrate in kbps (default: 128)')
   .option('-v, --verbose', 'Enable verbose logging')
+  .option('--flat-folder-structure', 'Use flat folder structure')
+  .option('--series-title-in-folder-structure', 'Include series title in folder structure')
+  .option('--variable-bit-rate', 'Apply variable bit rate')
+  .option('--aac-encoding-44-1', 'Fix AAC encoding for 44.1 kHz')
+  .option('--use-named-chapters', 'Use named chapters if available')
+  .option('--skip-short-chapters-duration <seconds>', 'Skip short chapters between book parts')
+  .option('--skip-very-short-chapter-duration <seconds>', 'Skip very short chapters at begin and end')
   .action(async (input: string, options: ConvertOptions = {}) => {
     // Set verbose mode
     if (options.verbose !== undefined) {
@@ -43,6 +57,13 @@ cli
       activationCode: options.code || config.activationCode,
       chaptersEnabled: options.chapters ?? config.chaptersEnabled,
       bitrate: options.bitrate ? Number(options.bitrate) : config.bitrate,
+      flatFolderStructure: options.flatFolderStructure ?? config.flatFolderStructure,
+      seriesTitleInFolderStructure: options.seriesTitleInFolderStructure ?? config.seriesTitleInFolderStructure,
+      variableBitRate: options.variableBitRate ?? config.variableBitRate,
+      aacEncoding44_1: options.aacEncoding44_1 ?? config.aacEncoding44_1,
+      useNamedChapters: options.useNamedChapters ?? config.useNamedChapters,
+      skipShortChaptersDuration: options.skipShortChaptersDuration ?? config.skipShortChaptersDuration,
+      skipVeryShortChapterDuration: options.skipVeryShortChapterDuration ?? config.skipVeryShortChapterDuration,
     })
 
     if (result.success) {

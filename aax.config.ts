@@ -2,10 +2,10 @@ import type { AAXConfig } from './src/types'
 
 const config: AAXConfig = {
   verbose: false,
-  outputFormat: 'mp3',
+  outputFormat: 'm4b',
   outputDir: './converted',
   chaptersEnabled: true,
-  bitrate: 128,
+  bitrate: 'source',
 
   // Folder structure defaults
   flatFolderStructure: false,
@@ -18,10 +18,10 @@ const config: AAXConfig = {
   customSearchWords: [],
   additionalPunctuation: '',
   intermediateFileCopy: false,
-  aacEncoding44_1: false,
-  variableBitRate: false,
+  aacEncoding44_1: true,
+  variableBitRate: true,
   reduceBitRate: 'no',
-  fileType: 'm4a',
+  fileType: 'm4b',
   useISOLatin1: false,
   extractCoverImage: true,
 

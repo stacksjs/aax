@@ -5,7 +5,7 @@ export interface AAXConfig {
   outputDir?: string
   outputFormat?: 'mp3' | 'm4a' | 'm4b'
   chaptersEnabled?: boolean
-  bitrate?: number
+  bitrate?: number | 'source'
   ffmpegPath?: string
   activationCode?: string
 
