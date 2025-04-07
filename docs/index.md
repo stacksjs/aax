@@ -3,9 +3,9 @@
 layout: home
 
 hero:
-  name: "AAX Audio Converter"
-  text: "Convert Audible AAX audiobooks."
-  tagline: "Modern and simple AAX to MP3/M4A/M4B converter."
+  name: "Audible AAX"
+  text: "Convert Audiobooks"
+  tagline: "Modern & simple AAX to MP3/M4A/M4B converter."
   image: /images/logo-white.png
   actions:
     - theme: brand
