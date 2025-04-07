@@ -1,4 +1,4 @@
-import type { ConversionOptions, ConversionResult, FileNaming } from './types'
+import type { ConversionOptions, ConversionResult } from './types'
 import { existsSync, mkdirSync } from 'node:fs'
 import path from 'node:path'
 import { config } from './config'
