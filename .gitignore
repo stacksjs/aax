@@ -10,7 +10,6 @@ logs
 node_modules
 temp
 docs/.vitepress/cache
-*.aax
 *.mp3
 *.m4b
 audible
