@@ -55,3 +55,13 @@ After conversion, you can navigate chapters in various ways:
 ::: warning
 Not all media players support chapter navigation. For the best experience, use a player that explicitly supports chapters, such as Apple Books or VLC.
 :::
+
+## Chapter Handling
+
+The AAX converter provides advanced chapter handling options:
+
+- **Use Named Chapters**: If available, named chapters will be used for better navigation.
+- **Skip Short Chapters**: Automatically skip short chapters between book parts to avoid repeated intros.
+- **Skip Very Short Chapters**: Skip very short chapters at the beginning and end of the audiobook.
+- **Verify Chapter Marks**: Verify and adjust chapter marks to ensure accuracy.
+- **Prefer Embedded Chapter Times**: Use embedded chapter times if available for precise navigation.

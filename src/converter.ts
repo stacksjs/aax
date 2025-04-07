@@ -1,39 +1,59 @@
-import type { ConversionOptions, ConversionResult } from './types'
+import type { ConversionOptions, ConversionResult, FileNaming } from './types'
 import { existsSync, mkdirSync } from 'node:fs'
 import path from 'node:path'
 import { config } from './config'
 import { checkFFmpeg, runFFmpeg } from './utils/ffmpeg'
 import { getBookMetadata } from './utils/metadata'
 
+function generateOutputPath(metadata: any, options: ConversionOptions): string {
+  const outputDir = options.outputDir || config.outputDir || '.'
+  const outputFormat = options.outputFormat || config.outputFormat || 'mp3'
+
+  let basePath = outputDir
+
+  // Handle folder structure
+  if (!options.flatFolderStructure) {
+    if (metadata.author) {
+      basePath = path.join(basePath, metadata.author)
+    }
+
+    if (options.seriesTitleInFolderStructure && metadata.series) {
+      basePath = path.join(basePath, metadata.series)
+    }
+
+    const bookFolder = options.fullCaptionForBookFolder
+      ? metadata.title
+      : metadata.title?.split(':')[0]
+
+    if (bookFolder) {
+      basePath = path.join(basePath, bookFolder)
+    }
+  }
+
+  // Create output directory structure
+  mkdirSync(basePath, { recursive: true })
+
+  // Generate filename
+  let filename = metadata.title || path.basename(options.inputFile, path.extname(options.inputFile))
+
+  // Add part number if available
+  if (metadata.seriesIndex && options.sequenceNumberDigits) {
+    const partNum = String(metadata.seriesIndex).padStart(options.sequenceNumberDigits, '0')
+    filename = `${options.partFolderPrefix || ''}${partNum} - ${filename}`
+  }
+
+  return path.join(basePath, `${filename}.${outputFormat}`)
+}
+
 /**
  * Convert an AAX file to the specified format
  */
 export async function convertAAX(options: ConversionOptions): Promise<ConversionResult> {
-  // Set default options from config
-  const outputFormat = options.outputFormat || config.outputFormat || 'mp3'
-  const outputDir = options.outputDir || config.outputDir || '.'
-  const activationCode = options.activationCode || config.activationCode
-  const chaptersEnabled = options.chaptersEnabled ?? config.chaptersEnabled ?? false
-  const bitrate = options.bitrate || config.bitrate || 64
-
-  // Ensure input file exists
+  // Validate input file
   if (!existsSync(options.inputFile)) {
     return {
       success: false,
       error: `Input file does not exist: ${options.inputFile}`,
-    }
-  }
-
-  // Validate output directory
-  if (!existsSync(outputDir)) {
-    try {
-      mkdirSync(outputDir, { recursive: true })
-    }
-    catch (error) {
-      return {
-        success: false,
-        error: `Could not create output directory: ${(error as Error).message}`,
-      }
     }
   }
 
@@ -47,6 +67,7 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
   }
 
   // Validate activation code
+  const activationCode = options.activationCode || config.activationCode
   if (!activationCode) {
     return {
       success: false,
@@ -56,58 +77,88 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
 
   console.warn(`Using activation code: ${activationCode.substring(0, 2)}******`)
 
-  // Get book metadata for naming
   try {
+    // Get book metadata
     const metadata = await getBookMetadata(options.inputFile)
-    const baseName = metadata.title
-      ? `${metadata.title.replace(/[\\/:*?"<>|]/g, '_')}`
-      : path.basename(options.inputFile, path.extname(options.inputFile))
-
-    const outputPath = path.join(outputDir, `${baseName}.${outputFormat}`)
+    const outputPath = generateOutputPath(metadata, options)
 
     // Build FFmpeg command
     const ffmpegArgs: string[] = []
 
-    // Try multiple activation code formats (uppercase, lowercase)
-    // First try original format
-    ffmpegArgs.push('-activation_bytes', activationCode)
-
     // Input file
+    ffmpegArgs.push('-activation_bytes', activationCode)
     ffmpegArgs.push('-i', options.inputFile)
 
-    // Only process the audio stream (stream 0:0)
+    // Audio stream selection
     ffmpegArgs.push('-map', '0:0')
 
-    // Audio quality
-    ffmpegArgs.push('-ab', `${bitrate}k`)
+    // Audio quality settings
+    if (options.variableBitRate) {
+      ffmpegArgs.push('-q:a', '0')
+    }
+    else {
+      const bitrate = options.bitrate || config.bitrate || 64
+      ffmpegArgs.push('-ab', `${bitrate}k`)
+    }
 
-    // Add metadata mapping
+    // Metadata
     ffmpegArgs.push('-map_metadata', '0')
 
     // Handle chapters
-    if (chaptersEnabled) {
-      ffmpegArgs.push('-map_chapters', '0')
+    if (options.chaptersEnabled) {
+      if (options.useNamedChapters) {
+        ffmpegArgs.push('-map_chapters', '0')
+      }
+
+      if (options.skipShortChaptersDuration) {
+        ffmpegArgs.push('-chapter_skip_short', options.skipShortChaptersDuration.toString())
+      }
+
+      if (options.skipVeryShortChapterDuration) {
+        ffmpegArgs.push('-chapter_skip_very_short', options.skipVeryShortChapterDuration.toString())
+      }
     }
 
-    // Output format specific settings
+    // Format specific settings
+    const outputFormat = options.outputFormat || config.outputFormat || 'mp3'
     if (outputFormat === 'mp3') {
       ffmpegArgs.push('-codec:a', 'libmp3lame')
       ffmpegArgs.push('-write_xing', '0')
       ffmpegArgs.push('-id3v2_version', '3')
+
+      if (options.useISOLatin1) {
+        ffmpegArgs.push('-id3v2_version', '3')
+        ffmpegArgs.push('-metadata_header_padding', '0')
+        ffmpegArgs.push('-write_id3v1', '1')
+      }
     }
     else if (outputFormat === 'm4a' || outputFormat === 'm4b') {
       ffmpegArgs.push('-codec:a', 'aac')
       ffmpegArgs.push('-f', 'mp4')
       ffmpegArgs.push('-movflags', '+faststart')
       ffmpegArgs.push('-metadata:s:a:0', 'handler=Sound')
+
+      if (options.aacEncoding44_1) {
+        ffmpegArgs.push('-ar', '44100')
+      }
+    }
+
+    // Extract cover image if requested
+    if (options.extractCoverImage) {
+      const coverPath = path.join(path.dirname(outputPath), 'cover.jpg')
+      ffmpegArgs.push('-map', '0:v')
+      ffmpegArgs.push('-c:v', 'copy')
+      ffmpegArgs.push(coverPath)
     }
 
     // Output file
-    ffmpegArgs.push('-y') // Overwrite output file if it exists
+    ffmpegArgs.push('-y')
     ffmpegArgs.push(outputPath)
 
-    // Log the full command for debugging
-    console.warn(`FFmpeg command: ffmpeg ${ffmpegArgs.join(' ')}`)
+    // Log command for debugging
+    if (config.verbose) {
+      console.warn(`FFmpeg command: ffmpeg ${ffmpegArgs.join(' ')}`)
+    }
 
     // Run FFmpeg
     const { success, output } = await runFFmpeg(ffmpegArgs)
@@ -119,13 +170,13 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
       }
     }
     else {
-      // If first attempt failed, try with lowercase activation code
+      // Try with lowercase activation code
       console.warn('First conversion attempt failed, trying with lowercase activation code...')
-
-      // Replace activation code with lowercase version
       ffmpegArgs[1] = activationCode.toLowerCase()
 
-      console.warn(`FFmpeg command (with lowercase code): ffmpeg ${ffmpegArgs.join(' ')}`)
+      if (config.verbose) {
+        console.warn(`FFmpeg command (with lowercase code): ffmpeg ${ffmpegArgs.join(' ')}`)
+      }
 
       const retryResult = await runFFmpeg(ffmpegArgs)
 

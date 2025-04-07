@@ -53,6 +53,44 @@ interface ConvertOptions {
   ffmpegPath?: string
   /** Enable verbose logging */
   verbose?: boolean
+  /** Use flat folder structure */
+  flatFolderStructure?: boolean
+  /** Include series title in folder structure */
+  seriesTitleInFolderStructure?: boolean
+  /** Use full caption for book folder */
+  fullCaptionForBookFolder?: boolean
+  /** Prefix for part folders */
+  partFolderPrefix?: string
+  /** Number of digits for sequence numbers */
+  sequenceNumberDigits?: number
+  /** Custom search words for parts */
+  customSearchWords?: string[]
+  /** Additional punctuation for book titles */
+  additionalPunctuation?: string
+  /** Intermediate file copy for single file mode */
+  intermediateFileCopy?: boolean
+  /** Fix AAC encoding for 44.1 kHz */
+  aacEncoding44_1?: boolean
+  /** Apply variable bit rate */
+  variableBitRate?: boolean
+  /** Reduce bit rate */
+  reduceBitRate?: 'no' | 'auto' | 'manual'
+  /** File type for MP4 audio */
+  fileType?: 'm4a' | 'm4b'
+  /** Use ISO Latin1 encoding for m3u playlist */
+  useISOLatin1?: boolean
+  /** Extract cover image */
+  extractCoverImage?: boolean
+  /** Use named chapters if available */
+  useNamedChapters?: boolean
+  /** Skip short chapters between book parts */
+  skipShortChaptersDuration?: number
+  /** Skip very short chapters at begin and end */
+  skipVeryShortChapterDuration?: number
+  /** Verify and adjust chapter marks */
+  verifyChapterMarks?: 'all' | 'none' | 'selected'
+  /** Prefer embedded chapter times */
+  preferEmbeddedChapterTimes?: boolean
 }
 ```
 
@@ -174,6 +212,32 @@ const result = await convertAAX({
   activationCode: '1a2b3c4d',
   ffmpegPath: '/custom/path/to/ffmpeg',
   verbose: true,
+})
+```
+
+### Custom Folder Structure
+
+```typescript
+import { convertAAX } from '@stacksjs/aax'
+
+const result = await convertAAX({
+  inputFile: 'audiobook.aax',
+  outputFormat: 'm4b',
+  outputDir: './organized',
+  flatFolderStructure: false,
+  seriesTitleInFolderStructure: true,
+})
+```
+
+### Advanced Conversion Settings
+
+```typescript
+import { convertAAX } from '@stacksjs/aax'
+
+const result = await convertAAX({
+  inputFile: 'audiobook.aax',
+  variableBitRate: true,
+  aacEncoding44_1: true,
 })
 ```
 

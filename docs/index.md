@@ -28,6 +28,12 @@ features:
   - title: "Auto Detection"
     icon: "🔍"
     details: "Automatically detect Audible activation codes."
+  - title: "Custom Folder Structure"
+    icon: "📂"
+    details: "Organize your audiobooks with custom folder structures."
+  - title: "Advanced Conversion"
+    icon: "⚙️"
+    details: "Utilize advanced conversion settings for optimal results."
 ---
 
 <Home />

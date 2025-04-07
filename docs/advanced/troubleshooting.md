@@ -85,6 +85,26 @@ This guide helps you resolve common issues with AAX Audio Converter.
    sudo aax convert audiobook.aax
    ```
 
+### Custom Folder Structure Issues
+
+- **Problem**: Incorrect folder structure.
+  - **Solution**: Verify the configuration settings for `flatFolderStructure` and `seriesTitleInFolderStructure`.
+
+### Advanced Conversion Settings
+
+- **Problem**: Conversion fails with variable bit rate.
+  - **Solution**: Ensure FFmpeg supports variable bit rate encoding.
+
+### Chapter Handling Problems
+
+- **Problem**: Chapters not preserved.
+  - **Solution**: Check if `useNamedChapters` is enabled and verify chapter marks.
+
+### Auto Detection Failures
+
+- **Problem**: Activation code not detected.
+  - **Solution**: Ensure the Audible CLI is set up correctly and the account is logged in.
+
 ## Verbose Logging
 
 Enable verbose logging to get more detailed error information:

@@ -95,4 +95,44 @@ describe('AAX Converter', () => {
     expect(result.success).toBe(false)
     expect(result.error).toContain('Input file does not exist')
   })
+
+  it('should apply custom folder structure', async () => {
+    const result = await convertAAX({
+      inputFile: FIXTURE_PATH,
+      outputFormat: 'mp3',
+      outputDir: OUTPUT_DIR,
+      flatFolderStructure: false,
+      seriesTitleInFolderStructure: true,
+    })
+
+    expect(result.success).toBe(true)
+    expect(mockRunFFmpeg).toHaveBeenCalled()
+  })
+
+  it('should use advanced conversion settings', async () => {
+    const result = await convertAAX({
+      inputFile: FIXTURE_PATH,
+      outputFormat: 'm4b',
+      outputDir: OUTPUT_DIR,
+      variableBitRate: true,
+      aacEncoding44_1: true,
+    })
+
+    expect(result.success).toBe(true)
+    expect(mockRunFFmpeg).toHaveBeenCalled()
+  })
+
+  it('should handle chapter options', async () => {
+    const result = await convertAAX({
+      inputFile: FIXTURE_PATH,
+      outputFormat: 'mp3',
+      outputDir: OUTPUT_DIR,
+      useNamedChapters: true,
+      skipShortChaptersDuration: 25,
+      skipVeryShortChapterDuration: 10,
+    })
+
+    expect(result.success).toBe(true)
+    expect(mockRunFFmpeg).toHaveBeenCalled()
+  })
 })

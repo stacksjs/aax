@@ -40,6 +40,12 @@ aax convert your-audiobook.aax --format m4b --output ./my-audiobooks --bitrate 1
 
 # Convert and split by chapters
 aax split your-audiobook.aax
+
+# New: Use custom folder structure
+aax convert your-audiobook.aax --flat-folder-structure --series-title-in-folder-structure
+
+# New: Advanced conversion settings
+aax convert your-audiobook.aax --variable-bit-rate --aac-encoding-44-1
 ```
 
 ### Available Options
@@ -50,6 +56,10 @@ aax split your-audiobook.aax
 - `--chapters` - Preserve chapter information (default: true)
 - `-b, --bitrate <kbps>` - Audio bitrate in kbps (default: 128)
 - `-v, --verbose` - Enable verbose logging
+- `--flat-folder-structure` - Use flat folder structure
+- `--series-title-in-folder-structure` - Include series title in folder structure
+- `--variable-bit-rate` - Apply variable bit rate
+- `--aac-encoding-44-1` - Fix AAC encoding for 44.1 kHz
 
 ### Setting up Audible CLI
 

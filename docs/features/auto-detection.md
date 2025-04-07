@@ -17,6 +17,15 @@ Your Audible credentials are:
 - Not stored anywhere in the application
 - Protected by Audible's secure authentication
 
+## Auto Detection Features
+
+The AAX converter includes several auto-detection features to simplify the conversion process:
+
+- **Activation Code Detection**: Automatically detect and use the Audible activation code for conversion.
+- **Format Detection**: Identify the best output format based on input file properties.
+- **Chapter Detection**: Automatically detect and preserve chapter information for better navigation.
+- **Bitrate Detection**: Suggest optimal bitrate settings based on input file quality.
+
 ## How It Works
 
 The auto-detection feature:

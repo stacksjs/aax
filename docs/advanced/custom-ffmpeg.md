@@ -105,3 +105,13 @@ For most users, the default FFmpeg installation from your package manager will w
 
 ::: warning
 Custom FFmpeg builds may require additional dependencies and configuration. Make sure to test your build before using it with the converter.
+
+## Custom FFmpeg Options
+
+The AAX converter allows you to customize FFmpeg settings for advanced users:
+
+- **Custom FFmpeg Path**: Specify a custom path to the FFmpeg binary if it's not in your system PATH.
+- **Intermediate File Copy**: Enable intermediate file copy for single file mode to improve conversion reliability.
+- **AAC Encoding for 44.1 kHz**: Fix AAC encoding for 44.1 kHz to ensure compatibility with certain players.
+- **Variable Bit Rate**: Apply variable bit rate for more efficient encoding.
+- **ISO Latin1 Encoding**: Use ISO Latin1 encoding for m3u playlists if needed.
