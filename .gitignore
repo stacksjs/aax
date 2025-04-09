@@ -13,3 +13,5 @@ docs/.vitepress/cache
 *.mp3
 *.m4b
 audible
+bin/aax
+bin/aax*
