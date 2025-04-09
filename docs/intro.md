@@ -52,6 +52,10 @@ Please see our [releases](https://github.com/stacksjs/aax/releases) page for mor
 
 Please review the [Contributing Guide](https://github.com/stacksjs/contributing) for details.
 
+## Stargazers
+
+[![Stargazers over time](https://starchart.cc/stacksjs/aax.svg?variant=adaptive)](https://starchart.cc/stacksjs/aax)
+
 ## Community
 
 For help, discussion about best practices, or any other conversation that would benefit from being searchable:

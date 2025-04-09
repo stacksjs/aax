@@ -43,10 +43,10 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            bin/aax-linux-x64
-            bin/aax-linux-arm64
-            bin/aax-windows-x64.exe
-            bin/aax-darwin-x64
-            bin/aax-darwin-arm64
+            bin/aax-linux-x64.zip
+            bin/aax-linux-arm64.zip
+            bin/aax-windows-x64.zip
+            bin/aax-darwin-x64.zip
+            bin/aax-darwin-arm64.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
