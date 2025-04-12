@@ -1,4 +1,24 @@
 
+## v0.3.0...main
+
+[compare changes](https://github.com/stacksjs/aax/compare/v0.3.0...main)
+
+### 🚀 Enhancements
+
+- CLI improvements ([12c509a](https://github.com/stacksjs/aax/commit/12c509a))
+
+### 🏡 Chore
+
+- Bin build changes and stargazer ([88293d3](https://github.com/stacksjs/aax/commit/88293d3))
+- Git ignore ([eadf3b9](https://github.com/stacksjs/aax/commit/eadf3b9))
+- Update pkgx ([28cbf0f](https://github.com/stacksjs/aax/commit/28cbf0f))
+- Adjust gitignore ([11793ef](https://github.com/stacksjs/aax/commit/11793ef))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](https://github.com/chrisbbreuer))
+- Cab-mikee ([@cab-mikee](https://github.com/cab-mikee))
+
 ## v0.2.1...main
 
 [compare changes](https://github.com/stacksjs/aax/compare/v0.2.1...main)
