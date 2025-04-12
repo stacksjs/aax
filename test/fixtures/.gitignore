@@ -1,1 +1,5 @@
-DesigningData-IntensiveApplicationsTheBigIdeasBehindReliableScalableandMaintainableSyst_ep7.aax
+# Ignore all AAX files
+*.aax
+
+# But keep mock.aax
+!mock.aax
