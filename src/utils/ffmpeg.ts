@@ -203,27 +203,30 @@ export async function runFFmpeg(args: string[]): Promise<{ success: boolean, out
         progressCompleted = true
 
         if (code === 0) {
-          // This is where the duplicate message happens
-          // Set to 100% first and only then finish with message
-          progressBar.update(100)
-          const barRef = progressBar // Store reference to avoid null issues
-          setTimeout(() => {
-            if (barRef)
-              barRef.finish('Conversion completed successfully!')
-          }, 50)
+          // At 100%, show the total time as both current and total time
+          const finalMessage = bookDuration
+            ? `Converting ${formatTime(bookDuration)} / ${formatTime(bookDuration)} (${currentSpeed}) - Size: ${currentSize}`
+            : 'Conversion complete'
+
+          // Don't use the finish method at all - just update to 100% with a message
+          progressBar.update(100, finalMessage)
+
+          // Don't call progressBar.finish() - this causes the duplicate message
+          // Instead, let the logger in converter.ts show the single success message
         }
         else {
+          // For errors, we still use the interrupt method
           progressBar.interrupt('Conversion failed', 'error')
         }
       }
 
-      // Give a small delay to allow the progress bar to finish properly
+      // Give a small delay to allow the progress bar to clean up
       setTimeout(() => {
         resolve({
           success: code === 0,
           output,
         })
-      }, 100)
+      }, 50)
     })
   })
 }
