@@ -1,4 +1,17 @@
 
+## v0.4.0...main
+
+[compare changes](https://github.com/stacksjs/aax/compare/v0.4.0...main)
+
+### 🏡 Chore
+
+- Add screenshot ([bbd30ea](https://github.com/stacksjs/aax/commit/bbd30ea))
+- Minor log improvements ([79ceda8](https://github.com/stacksjs/aax/commit/79ceda8))
+
+### ❤️ Contributors
+
+- Chris ([@chrisbbreuer](https://github.com/chrisbbreuer))
+
 ## v0.3.0...main
 
 [compare changes](https://github.com/stacksjs/aax/compare/v0.3.0...main)
