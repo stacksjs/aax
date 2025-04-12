@@ -63,9 +63,11 @@ export function extractChapters(metadataText: string): Chapter[] {
 
 /**
  * Extract all metadata from an AAX file
+ * @param filePath Path to the AAX file
+ * @param existingMetadata Optional pre-extracted metadata text to prevent duplicate extraction
  */
-export async function getBookMetadata(filePath: string): Promise<BookMetadata> {
-  const metadataText = await extractAAXMetadata(filePath)
+export async function getBookMetadata(filePath: string, existingMetadata?: string): Promise<BookMetadata> {
+  const metadataText = existingMetadata || await extractAAXMetadata(filePath)
   const basicMetadata = parseMetadata(metadataText)
   const chapters = extractChapters(metadataText)
 

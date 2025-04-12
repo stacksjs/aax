@@ -3,6 +3,7 @@ import { existsSync, mkdirSync } from 'node:fs'
 import path from 'node:path'
 import { config } from './config'
 import { checkFFmpeg, runFFmpeg } from './utils/ffmpeg'
+import { logger } from './utils/logger'
 import { getBookMetadata } from './utils/metadata'
 
 function generateOutputPath(metadata: any, options: ConversionOptions): string {
@@ -51,15 +52,21 @@ function generateOutputPath(metadata: any, options: ConversionOptions): string {
 export async function convertAAX(options: ConversionOptions): Promise<ConversionResult> {
   // Validate input file
   if (!existsSync(options.inputFile)) {
+    logger.error(`Input file does not exist: ${options.inputFile}`)
     return {
       success: false,
       error: `Input file does not exist: ${options.inputFile}`,
     }
   }
 
+  // Start the conversion process with a nice header
+  await logger.box(`Converting ${path.basename(options.inputFile)}`)
+
   // Check FFmpeg
+  logger.info('Checking FFmpeg installation...')
   const ffmpegAvailable = await checkFFmpeg()
   if (!ffmpegAvailable) {
+    logger.error('FFmpeg is not available. Please install FFmpeg or set ffmpegPath in config.')
     return {
       success: false,
       error: 'FFmpeg is not available. Please install FFmpeg or set ffmpegPath in config.',
@@ -69,20 +76,48 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
   // Validate activation code
   const activationCode = options.activationCode || config.activationCode
   if (!activationCode) {
+    logger.error('No activation code provided. This is required to convert AAX files.')
     return {
       success: false,
       error: 'No activation code provided. This is required to convert AAX files.',
     }
   }
 
-  console.warn(`Using activation code: ${activationCode.substring(0, 2)}******`)
+  logger.info(`Using activation code: ${activationCode.substring(0, 2)}******`)
 
   try {
     // Get book metadata
+    logger.info('Retrieving audiobook metadata...')
+
+    // Get metadata (use getBookMetadata which will internally call extractAAXMetadata)
     const metadata = await getBookMetadata(options.inputFile)
     const outputPath = generateOutputPath(metadata, options)
 
+    // Log book info
+    if (metadata.title) {
+      logger.info(`Title: ${metadata.title}`)
+    }
+    if (metadata.author) {
+      logger.info(`Author: ${metadata.author}`)
+    }
+    if (metadata.narrator) {
+      logger.info(`Narrator: ${metadata.narrator}`)
+    }
+    if (metadata.duration) {
+      const hours = Math.floor(metadata.duration / 3600)
+      const minutes = Math.floor((metadata.duration % 3600) / 60)
+      const seconds = Math.floor(metadata.duration % 60)
+      logger.info(`Duration: ${hours}h ${minutes}m ${seconds}s`)
+    }
+    if (metadata.chapters?.length) {
+      logger.info(`Chapters: ${metadata.chapters.length}`)
+    }
+
+    logger.info(`Output format: ${options.outputFormat || config.outputFormat || 'mp3'}`)
+    logger.info(`Output path: ${outputPath}`)
+
     // Build FFmpeg command
+    logger.info('Preparing FFmpeg command...')
     const ffmpegArgs: string[] = []
 
     // Input file
@@ -108,14 +143,6 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
     if (options.chaptersEnabled) {
       if (options.useNamedChapters) {
         ffmpegArgs.push('-map_chapters', '0')
-      }
-
-      if (options.skipShortChaptersDuration) {
-        ffmpegArgs.push('-chapter_skip_short', options.skipShortChaptersDuration.toString())
-      }
-
-      if (options.skipVeryShortChapterDuration) {
-        ffmpegArgs.push('-chapter_skip_very_short', options.skipVeryShortChapterDuration.toString())
       }
     }
 
@@ -157,13 +184,15 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
 
     // Log command for debugging
     if (config.verbose) {
-      console.warn(`FFmpeg command: ffmpeg ${ffmpegArgs.join(' ')}`)
+      logger.debug(`FFmpeg command: ffmpeg ${ffmpegArgs.join(' ')}`)
     }
 
     // Run FFmpeg
+    logger.info('Starting conversion...')
     const { success, output } = await runFFmpeg(ffmpegArgs)
 
     if (success) {
+      logger.success(`Conversion completed! Output saved to: ${outputPath}`)
       return {
         success: true,
         outputPath,
@@ -171,22 +200,24 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
     }
     else {
       // Try with lowercase activation code
-      console.warn('First conversion attempt failed, trying with lowercase activation code...')
+      logger.warn('First conversion attempt failed, trying with lowercase activation code...')
       ffmpegArgs[1] = activationCode.toLowerCase()
 
       if (config.verbose) {
-        console.warn(`FFmpeg command (with lowercase code): ffmpeg ${ffmpegArgs.join(' ')}`)
+        logger.debug(`FFmpeg command (with lowercase code): ffmpeg ${ffmpegArgs.join(' ')}`)
       }
 
       const retryResult = await runFFmpeg(ffmpegArgs)
 
       if (retryResult.success) {
+        logger.success(`Conversion completed! Output saved to: ${outputPath}`)
         return {
           success: true,
           outputPath,
         }
       }
 
+      logger.error('Conversion failed. Check the logs for details.')
       return {
         success: false,
         error: `FFmpeg conversion failed: ${output}`,
@@ -194,6 +225,7 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
     }
   }
   catch (error) {
+    logger.error(`Error during conversion: ${(error as Error).message}`)
     return {
       success: false,
       error: `Error during conversion: ${(error as Error).message}`,
@@ -205,6 +237,7 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
  * Split an AAX file into chapters
  */
 export async function splitToChapters(options: ConversionOptions): Promise<ConversionResult> {
+  logger.info('Converting and splitting audiobook by chapters...')
   const chaptersEnabled = true
   return convertAAX({ ...options, chaptersEnabled })
 }

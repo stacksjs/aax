@@ -29,8 +29,6 @@ export interface AAXConfig {
 
   // Chapter settings
   useNamedChapters?: boolean
-  skipShortChaptersDuration?: number
-  skipVeryShortChapterDuration?: number
   verifyChapterMarks?: 'all' | 'none' | 'selected'
   preferEmbeddedChapterTimes?: boolean
 }

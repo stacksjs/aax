@@ -27,8 +27,6 @@ const config: AAXConfig = {
 
   // Chapter settings
   useNamedChapters: true,
-  skipShortChaptersDuration: 25,
-  skipVeryShortChapterDuration: 10,
   verifyChapterMarks: 'all',
   preferEmbeddedChapterTimes: true,
 }

@@ -131,18 +131,6 @@ const config: AAXConfig = {
   useNamedChapters: true,
 
   /**
-   * Skip short chapters between book parts
-   * Default: 25
-   */
-  skipShortChaptersDuration: 25,
-
-  /**
-   * Skip very short chapters at begin and end
-   * Default: 10
-   */
-  skipVeryShortChapterDuration: 10,
-
-  /**
    * Verify and adjust chapter marks
    * Default: 'all'
    * Options: 'all', 'none', 'selected'

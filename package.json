@@ -57,9 +57,12 @@
     "zip:darwin-x64": "zip -j bin/aax-darwin-x64.zip bin/aax-darwin-x64",
     "zip:darwin-arm64": "zip -j bin/aax-darwin-arm64.zip bin/aax-darwin-arm64"
   },
+  "dependencies": {
+    "@stacksjs/clarity": "^0.3.8"
+  },
   "devDependencies": {
     "@stacksjs/docs": "^0.70.23",
-    "@stacksjs/eslint-config": "^4.2.1-beta.1",
+    "@stacksjs/eslint-config": "^4.10.2-beta.3",
     "@types/bun": "^1.2.9",
     "bumpp": "^10.1.0",
     "bun-plugin-dtsx": "^0.21.9",

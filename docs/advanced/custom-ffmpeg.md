@@ -105,6 +105,7 @@ For most users, the default FFmpeg installation from your package manager will w
 
 ::: warning
 Custom FFmpeg builds may require additional dependencies and configuration. Make sure to test your build before using it with the converter.
+:::
 
 ## Custom FFmpeg Options
 

@@ -61,8 +61,6 @@ aax convert your-audiobook.aax --variable-bit-rate --aac-encoding-44-1
 - `--variable-bit-rate` - Apply variable bit rate
 - `--aac-encoding-44-1` - Fix AAC encoding for 44.1 kHz
 - `--use-named-chapters` - Use named chapters if available
-- `--skip-short-chapters-duration <seconds>` - Skip short chapters between book parts
-- `--skip-very-short-chapter-duration <seconds>` - Skip very short chapters at begin and end
 
 ### Setting up Audible CLI
 

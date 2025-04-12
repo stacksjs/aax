@@ -4,6 +4,7 @@ import { CAC } from 'cac'
 import { version } from '../package.json'
 import { config, convertAAX, isValidActivationCode, splitToChapters } from '../src'
 import { getActivationBytesFromAudibleCli } from '../src/utils/activation'
+import { logger } from '../src/utils/logger'
 
 const cli = new CAC('aax')
 
@@ -19,8 +20,6 @@ interface ConvertOptions {
   variableBitRate?: boolean
   aacEncoding44_1?: boolean
   useNamedChapters?: boolean
-  skipShortChaptersDuration?: number
-  skipVeryShortChapterDuration?: number
 }
 
 cli
@@ -36,8 +35,6 @@ cli
   .option('--variable-bit-rate', 'Apply variable bit rate')
   .option('--aac-encoding-44-1', 'Fix AAC encoding for 44.1 kHz')
   .option('--use-named-chapters', 'Use named chapters if available')
-  .option('--skip-short-chapters-duration <seconds>', 'Skip short chapters between book parts')
-  .option('--skip-very-short-chapter-duration <seconds>', 'Skip very short chapters at begin and end')
   .action(async (input: string, options: ConvertOptions = {}) => {
     // Set verbose mode
     if (options.verbose !== undefined) {
@@ -46,7 +43,7 @@ cli
 
     // Validate activation code if provided
     if (options.code && !isValidActivationCode(options.code)) {
-      console.error('Error: Invalid activation code format. Should be an 8-character hex string.')
+      logger.error('Invalid activation code format. Should be an 8-character hex string.')
       process.exit(1)
     }
 
@@ -62,16 +59,10 @@ cli
       variableBitRate: options.variableBitRate ?? config.variableBitRate,
       aacEncoding44_1: options.aacEncoding44_1 ?? config.aacEncoding44_1,
       useNamedChapters: options.useNamedChapters ?? config.useNamedChapters,
-      skipShortChaptersDuration: options.skipShortChaptersDuration ?? config.skipShortChaptersDuration,
-      skipVeryShortChapterDuration: options.skipVeryShortChapterDuration ?? config.skipVeryShortChapterDuration,
     })
 
-    if (result.success) {
-      console.log(`✅ Conversion completed successfully!`)
-      console.log(`Output: ${result.outputPath}`)
-    }
-    else {
-      console.error(`❌ Conversion failed: ${result.error}`)
+    // The result is already displayed by the logger in converter.ts, so we don't need to do anything here
+    if (!result.success) {
       process.exit(1)
     }
   })
@@ -91,7 +82,7 @@ cli
 
     // Validate activation code if provided
     if (options.code && !isValidActivationCode(options.code)) {
-      console.error('Error: Invalid activation code format. Should be an 8-character hex string.')
+      logger.error('Invalid activation code format. Should be an 8-character hex string.')
       process.exit(1)
     }
 
@@ -103,12 +94,8 @@ cli
       bitrate: options.bitrate ? Number(options.bitrate) : config.bitrate,
     })
 
-    if (result.success) {
-      console.log(`✅ Conversion and chapter splitting completed successfully!`)
-      console.log(`Output: ${result.outputPath}`)
-    }
-    else {
-      console.error(`❌ Conversion failed: ${result.error}`)
+    // The result is already displayed by the logger in converter.ts, so we don't need to do anything here
+    if (!result.success) {
       process.exit(1)
     }
   })
@@ -117,35 +104,35 @@ cli
 cli
   .command('setup-audible', 'Set up the Audible CLI and retrieve activation bytes')
   .option('-v, --verbose', 'Enable verbose logging')
-  .action((options: { verbose?: boolean } = {}) => {
+  .action(async (options: { verbose?: boolean } = {}) => {
     // Set verbose mode if requested
     if (options.verbose !== undefined) {
       config.verbose = options.verbose
     }
 
-    console.log('Setting up Audible CLI and retrieving activation bytes...')
-    console.log('Note: You may be prompted to log in to your Audible account.')
-    console.log('Follow the prompts in the terminal to complete the setup.\n')
+    await logger.box('Setting up Audible CLI')
+    logger.info('You may be prompted to log in to your Audible account.')
+    logger.info('Follow the prompts in the terminal to complete the setup.')
 
     const activationCode = getActivationBytesFromAudibleCli()
 
     if (activationCode) {
-      console.log(`\n✅ Successfully retrieved activation bytes: ${activationCode.substring(0, 2)}******`)
-      console.log('\nYou can now use this activation code with the convert command:')
-      console.log(`aax convert your-audiobook.aax -c ${activationCode}`)
+      logger.success(`Successfully retrieved activation bytes: ${activationCode.substring(0, 2)}******`)
+      logger.info('\nYou can now use this activation code with the convert command:')
+      logger.info(`aax convert your-audiobook.aax -c ${activationCode}`)
 
       // The activation code has been saved through the getActivationBytesFromAudibleCli function
-      console.log('\nThe activation code has been saved and will be used automatically for future conversions.')
+      logger.info('The activation code has been saved and will be used automatically for future conversions.')
     }
     else {
-      console.error('\n❌ Failed to retrieve activation bytes from Audible CLI.')
-      console.log('\nYou can try the manual setup process:')
-      console.log('1. Run: ./audible quickstart')
-      console.log('2. Follow the prompts to log in to your Audible account')
-      console.log('3. Once set up, run: ./audible activation-bytes')
-      console.log('4. Note the activation code (a 8-character hex string like "2c1eeb0a")')
-      console.log('5. Use the code with the convert command:')
-      console.log('   aax convert your-audiobook.aax -c YOUR_ACTIVATION_CODE')
+      logger.error('Failed to retrieve activation bytes from Audible CLI.')
+      logger.info('\nYou can try the manual setup process:')
+      logger.info('1. Run: ./audible quickstart')
+      logger.info('2. Follow the prompts to log in to your Audible account')
+      logger.info('3. Once set up, run: ./audible activation-bytes')
+      logger.info('4. Note the activation code (a 8-character hex string like "2c1eeb0a")')
+      logger.info('5. Use the code with the convert command:')
+      logger.info('   aax convert your-audiobook.aax -c YOUR_ACTIVATION_CODE')
     }
   })
 

@@ -83,10 +83,6 @@ interface ConvertOptions {
   extractCoverImage?: boolean
   /** Use named chapters if available */
   useNamedChapters?: boolean
-  /** Skip short chapters between book parts */
-  skipShortChaptersDuration?: number
-  /** Skip very short chapters at begin and end */
-  skipVeryShortChapterDuration?: number
   /** Verify and adjust chapter marks */
   verifyChapterMarks?: 'all' | 'none' | 'selected'
   /** Prefer embedded chapter times */

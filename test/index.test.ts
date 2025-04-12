@@ -128,8 +128,6 @@ describe('AAX Converter', () => {
       outputFormat: 'mp3',
       outputDir: OUTPUT_DIR,
       useNamedChapters: true,
-      skipShortChaptersDuration: 25,
-      skipVeryShortChapterDuration: 10,
     })
 
     expect(result.success).toBe(true)
