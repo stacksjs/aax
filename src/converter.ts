@@ -2,6 +2,7 @@ import type { ConversionOptions, ConversionResult } from './types'
 import { existsSync, mkdirSync } from 'node:fs'
 import path from 'node:path'
 import { config } from './config'
+import { getActivationBytesFromAudibleCli } from './utils/activation'
 import { checkFFmpeg, runFFmpeg } from './utils/ffmpeg'
 import { logger } from './utils/logger'
 import { getBookMetadata } from './utils/metadata'
@@ -51,6 +52,14 @@ function generateOutputPath(metadata: any, options: ConversionOptions): string {
  */
 export async function convertAAX(options: ConversionOptions): Promise<ConversionResult> {
   // Validate input file
+  if (!options.inputFile) {
+    logger.error('No input file provided. Please specify an AAX file to convert.')
+    return {
+      success: false,
+      error: 'No input file provided',
+    }
+  }
+
   if (!existsSync(options.inputFile)) {
     logger.error(`Input file does not exist: ${options.inputFile}`)
     return {
@@ -59,24 +68,24 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
     }
   }
 
-  // Start the conversion process with a nice header
-  await logger.box(`Converting ${path.basename(options.inputFile)}`)
-
-  // Check FFmpeg
-  logger.info('Checking FFmpeg installation...')
+  // Check for ffmpeg
   const ffmpegAvailable = await checkFFmpeg()
   if (!ffmpegAvailable) {
-    logger.error('FFmpeg is not available. Please install FFmpeg or set ffmpegPath in config.')
+    logger.error('FFmpeg is not available. Please install FFmpeg and try again.')
     return {
       success: false,
-      error: 'FFmpeg is not available. Please install FFmpeg or set ffmpegPath in config.',
+      error: 'FFmpeg not found. Required for conversion.',
     }
   }
+  logger.info('Checking FFmpeg installation...')
 
-  // Validate activation code
-  const activationCode = options.activationCode || config.activationCode
+  // Get activation code
+  const activationCode = options.activationCode || config.activationCode || await getActivationBytesFromAudibleCli()
+
   if (!activationCode) {
-    logger.error('No activation code provided. This is required to convert AAX files.')
+    logger.error('No activation code provided for decryption.')
+    logger.info('You can specify an activation code with the -c option or set it in your config.')
+    logger.info('To auto-detect activation code, run "aax setup-audible" first.')
     return {
       success: false,
       error: 'No activation code provided. This is required to convert AAX files.',
@@ -113,8 +122,13 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
       logger.info(`Chapters: ${metadata.chapters.length}`)
     }
 
+    // Avoid duplicate logs by using logger.debug for detailed path info
     logger.info(`Output format: ${options.outputFormat || config.outputFormat || 'mp3'}`)
-    logger.info(`Output path: ${outputPath}`)
+
+    // Only log the base output path once, more detailed path info in debug
+    const shortPath = path.basename(outputPath)
+    logger.info(`Output path: ${shortPath}`)
+    logger.debug(`Full output path: ${outputPath}`)
 
     // Build FFmpeg command
     logger.info('Preparing FFmpeg command...')

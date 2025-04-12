@@ -81,14 +81,15 @@ export async function runFFmpeg(args: string[]): Promise<{ success: boolean, out
     let currentSize = '0KB'
     let currentSpeed = '0x'
 
-    // Progress bar
-    const progressBar = isMetadataExtraction
-      ? null
-      : logger.progress(100, 'Preparing conversion...')
+    // Progress bar reference - only created once explicitly needed
+    let progressBar: ReturnType<typeof logger.progress> | null = null
+
+    // Flag to prevent duplicate completion messages
+    let progressCompleted = false
 
     // Regular update interval
     const updateInterval = setInterval(() => {
-      if (!progressBar || !bookDuration)
+      if (!progressBar || !bookDuration || progressCompleted)
         return
 
       // Only apply time-based updates if we're actually making progress
@@ -96,7 +97,7 @@ export async function runFFmpeg(args: string[]): Promise<{ success: boolean, out
       if (now - lastOutputTime > 3000 && currentTimeMs > 0) {
         // It's been a while since the last FFmpeg update, show progress is still happening
         // Assume some minimal progress
-        const progressPercent = Math.max(0.1, Math.min(99.9, (currentTimeMs / bookDuration) * 100))
+        const progressPercent = Math.min(99, (currentTimeMs / bookDuration) * 100)
         progressBar.update(progressPercent, `Converting ${formatTime(currentTimeMs)} / ${formatTime(bookDuration)} (${currentSpeed}) - Size: ${currentSize}`)
 
         // Small time progress so user knows it's not frozen
@@ -105,15 +106,22 @@ export async function runFFmpeg(args: string[]): Promise<{ success: boolean, out
     }, 1000)
 
     function updateProgressFromOutput(text: string) {
-      if (!progressBar)
-        return
-
       const progress = parseFFmpegProgress(text)
 
       // Get total duration once we know it
       if (progress.totalMs && progress.totalMs > 0 && !bookDuration) {
         bookDuration = progress.totalMs
+
+        // Create progress bar when we first know the duration
+        // This prevents creating it prematurely
+        if (!isMetadataExtraction && !progressBar && !progressCompleted) {
+          progressBar = logger.progress(100, 'Starting conversion...')
+        }
       }
+
+      // Skip further processing if no progress bar
+      if (!progressBar || progressCompleted)
+        return
 
       // Update time position if provided
       if (progress.timeMs !== undefined) {
@@ -122,7 +130,7 @@ export async function runFFmpeg(args: string[]): Promise<{ success: boolean, out
 
         // Calculate progress percentage based on time
         if (bookDuration) {
-          const progressPercent = Math.max(0.1, Math.min(99.9, (currentTimeMs / bookDuration) * 100))
+          const progressPercent = Math.min(99, (currentTimeMs / bookDuration) * 100)
 
           // Update size and speed if available
           if (progress.size)
@@ -191,19 +199,31 @@ export async function runFFmpeg(args: string[]): Promise<{ success: boolean, out
     ffmpeg.on('close', (code) => {
       clearInterval(updateInterval)
 
-      if (progressBar) {
+      if (progressBar && !progressCompleted) {
+        progressCompleted = true
+
         if (code === 0) {
-          progressBar.finish('Conversion completed successfully!')
+          // This is where the duplicate message happens
+          // Set to 100% first and only then finish with message
+          progressBar.update(100)
+          const barRef = progressBar // Store reference to avoid null issues
+          setTimeout(() => {
+            if (barRef)
+              barRef.finish('Conversion completed successfully!')
+          }, 50)
         }
         else {
           progressBar.interrupt('Conversion failed', 'error')
         }
       }
 
-      resolve({
-        success: code === 0,
-        output,
-      })
+      // Give a small delay to allow the progress bar to finish properly
+      setTimeout(() => {
+        resolve({
+          success: code === 0,
+          output,
+        })
+      }, 100)
     })
   })
 }
@@ -212,7 +232,12 @@ export async function runFFmpeg(args: string[]): Promise<{ success: boolean, out
  * Extracts metadata from an AAX file using FFmpeg
  */
 export async function extractAAXMetadata(filePath: string): Promise<string> {
-  logger.info(`Extracting metadata from ${filePath}...`)
+  // Shorten the filepath display if it's too long
+  const displayPath = filePath.length > 70
+    ? `...${filePath.substring(filePath.length - 67)}`
+    : filePath
+
+  logger.debug(`Extracting metadata from ${displayPath}...`)
 
   // For metadata extraction we use a simple info message rather than a progress bar
   // since it's usually quick and doesn't provide meaningful progress information

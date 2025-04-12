@@ -10,6 +10,8 @@
 
 A TypeScript library and CLI tool for converting Audible AAX audiobooks to standard MP3, M4A, or M4B formats.
 
+![Screenshot](.github/art/screenshot.png)
+
 ## Features
 
 - Convert AAX files to MP3, M4A, or M4B formats
