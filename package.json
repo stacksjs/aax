@@ -55,7 +55,7 @@
     "zip:linux-arm64": "zip -j bin/aax-linux-arm64.zip bin/aax-linux-arm64",
     "zip:windows-x64": "zip -j bin/aax-windows-x64.zip bin/aax-windows-x64.exe",
     "zip:darwin-x64": "zip -j bin/aax-darwin-x64.zip bin/aax-darwin-x64",
-    "zip:darwin-arm64": "zip -j bin/aax-darwin-arm64.zip bin/aax-darwin-arm64",
+    "zip:darwin-arm64": "zip -j bin/aax-darwin-arm64.zip bin/aax-darwin-arm64"
   },
   "devDependencies": {
     "@stacksjs/clarity": "^0.3.14",

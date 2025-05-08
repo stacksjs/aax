@@ -26,16 +26,17 @@ const ACTIVATION_LOCATIONS = {
 
 // A collection of known activation codes that work for many AAX files
 // These are publicly available and widely used for research purposes
+
 const KNOWN_ACTIVATION_CODES = [
-  '1CEB00DA', // Common code that works for many files, try this first for our specific test fixture
-  '4F087621', // Alternative code
-  '7B95D5DA', // Alternative code
-  'A9EDBB73', // Additional code
-  '9A1DC7AE', // This one didn't work for our test fixture, try it last
-]
+  '1CEB00DA',
+  '4F087621',
+  '7B95D5DA',
+  'A9EDBB73',
+  '9A1DC7AE',
+] as const
 
 // Cache file for activation codes
-const ACTIVATION_CACHE_FILE = path.join(homedir(), '.aax-activation-cache.json')
+const ACTIVATION_CACHE_FILE: string = path.join(homedir(), '.aax-activation-cache.json')
 
 /**
  * Try to find the Audible activation code from known locations
