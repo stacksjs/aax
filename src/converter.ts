@@ -4,7 +4,7 @@ import path from 'node:path'
 import { config } from './config'
 import { getActivationBytesFromAudibleCli } from './utils/activation'
 import { checkFFmpeg, runFFmpeg } from './utils/ffmpeg'
-import { logger } from './utils/logger'
+import { logger, reportError } from './utils/logger'
 import { getBookMetadata } from './utils/metadata'
 
 function generateOutputPath(metadata: any, options: ConversionOptions): string {
@@ -71,7 +71,16 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
   // Check for ffmpeg
   const ffmpegAvailable = await checkFFmpeg()
   if (!ffmpegAvailable) {
-    logger.error('FFmpeg is not available. Please install FFmpeg and try again.')
+    reportError(new Error('FFmpeg is not available'), {
+      heading: 'FFmpeg not found. Required for conversion.',
+      details: 'The converter requires FFmpeg to decrypt and transcode AAX files.',
+      hints: [
+        'Install on macOS: brew install ffmpeg',
+        'Install on Linux: use your package manager (e.g., apt install ffmpeg)',
+        'Install on Windows: https://ffmpeg.org/download.html',
+        'Alternatively set ffmpegPath in aax.config.ts to your ffmpeg binary',
+      ],
+    })
     return {
       success: false,
       error: 'FFmpeg not found. Required for conversion.',
@@ -83,9 +92,15 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
   const activationCode = options.activationCode || config.activationCode || await getActivationBytesFromAudibleCli()
 
   if (!activationCode) {
-    logger.error('No activation code provided for decryption.')
-    logger.info('You can specify an activation code with the -c option or set it in your config.')
-    logger.info('To auto-detect activation code, run "aax setup-audible" first.')
+    reportError(new Error('Missing activation code'), {
+      heading: 'No activation code provided for decryption.',
+      details: 'Audible AAX files require an 8-character activation code (activation bytes) to decrypt.',
+      hints: [
+        'Provide activationCode in options or in aax.config.ts',
+        'Use Audible CLI to fetch: audible activation-bytes (run audible quickstart first)',
+        'Try environment overrides and run again with AAX_LOG_LEVEL=debug for more output',
+      ],
+    })
     return {
       success: false,
       error: 'No activation code provided. This is required to convert AAX files.',
@@ -231,7 +246,15 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
         }
       }
 
-      logger.error('Conversion failed. Check the logs for details.')
+      reportError(new Error('Conversion failed'), {
+        heading: 'Conversion failed.',
+        details: 'FFmpeg returned a non-zero exit code.',
+        hints: [
+          'Verify the activation code is correct (case sensitive)',
+          'Try running with AAX_LOG_LEVEL=debug to see the FFmpeg command and output',
+          'Ensure input file is a valid AAX and not corrupted',
+        ],
+      })
       return {
         success: false,
         error: `FFmpeg conversion failed: ${output}`,
@@ -239,7 +262,12 @@ export async function convertAAX(options: ConversionOptions): Promise<Conversion
     }
   }
   catch (error) {
-    logger.error(`Error during conversion: ${(error as Error).message}`)
+    reportError(error, {
+      heading: 'Unexpected error during conversion.',
+      hints: [
+        'Re-run with AAX_LOG_LEVEL=debug to include stack traces',
+      ],
+    })
     return {
       success: false,
       error: `Error during conversion: ${(error as Error).message}`,
