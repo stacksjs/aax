@@ -5,7 +5,7 @@
       "name": "@stacksjs/aax",
       "devDependencies": {
         "@stacksjs/bumpx": "^0.1.84",
-        "@stacksjs/clarity": "^0.3.17",
+        "@stacksjs/clarity": "^0.3.19",
         "@stacksjs/docs": "^0.70.23",
         "@stacksjs/eslint-config": "^4.14.0-beta.3",
         "@stacksjs/gitlint": "^0.1.5",
@@ -497,7 +497,7 @@
 
     "@stacksjs/clapp": ["@stacksjs/clapp@0.1.16", "", { "bin": { "clapp": "dist/bin/cli.js", "@stacksjs/clapp": "dist/bin/cli.js" } }, "sha512-BDmYu9Rk/HHIVc4vQjgQO6MzXNMJvPG6ZGiiEAPQT8EAidx3/6S6O7kyY2UdfJSksiCd5SKFK+WYd1uAs88BrQ=="],
 
-    "@stacksjs/clarity": ["@stacksjs/clarity@0.3.17", "", { "bin": { "clarity": "dist/bin/cli.js" } }, "sha512-uopKQuFzed7y5RvIyYmswjEDbh/vvt8szJpa+BfdLrZyXmmfZH900DuAvWhmrQd1uu1Lq0a7E/aVagP7ocf//A=="],
+    "@stacksjs/clarity": ["@stacksjs/clarity@0.3.19", "", { "bin": { "clarity": "dist/bin/cli.js" } }, "sha512-HSDVXrz7IyxXlIO7YKW+7RjVqibfyMIOr59nM6R/RbnRHmitKktt4qQUaA8aeTTV0RsFYaGt8WueD9nsrAooUQ=="],
 
     "@stacksjs/cli": ["@stacksjs/cli@0.70.23", "", {}, "sha512-pbu6xESAtRIppcEQlhmRq0yZa1lnYAwtQHh7DmfDcUgVjvahQGe7PXoX+m2dhdFDRthFIVuLeHvrAf1JYv/JOQ=="],
 
