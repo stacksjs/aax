@@ -73,7 +73,7 @@
     "bun-plugin-dtsx": "0.21.12",
     "bunfig": "^0.15.0",
     "changelogen": "^0.6.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "git-hooks": {
     "pre-commit": {
