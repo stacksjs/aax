@@ -121,7 +121,7 @@ export function reportError(
 /**
  * Normalize unknown errors to a consistent shape.
  */
-export function normalizeError(error: unknown): { message: string; stack?: string } {
+export function normalizeError(error: unknown): { message: string, stack?: string } {
   if (error instanceof Error) {
     return { message: error.message, stack: error.stack }
   }
